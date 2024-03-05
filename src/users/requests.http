@@ -4,4 +4,10 @@ Content-Type: application/json
 {
     "email": "admin@mail.com",
     "password": "adminadmin"
-}
+} 
+
+### 
+GET  http://localhost:3000/auth/
+
+###
+GET  http://localhost:3000/auth/1
