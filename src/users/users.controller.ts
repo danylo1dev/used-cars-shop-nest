@@ -1,11 +1,9 @@
 import {
-  BadRequestException,
   Body,
   ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
-  NotFoundException,
   Param,
   Patch,
   Post,
@@ -14,35 +12,28 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ResponseToSerializable } from 'src/decorators/ResponseToSerializable';
+import { AuthService } from './auth.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserDto } from './dtos/user.dto';
-import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
 @Controller('/auth')
 @SerializeOptions({ strategy: 'exposeAll' })
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Post('/signup')
   @ResponseToSerializable(UserDto)
   @UseInterceptors(ClassSerializerInterceptor)
   async singUp(@Body() input: CreateUserDto): Promise<UserDto> {
-    const user = await this.usersService.findUnique({
+    return await this.authService.signup({
+      ...input,
       email: input.email.toLowerCase(),
     });
-    if (user) {
-      throw new BadRequestException(
-        `User with email ${input.email} alredy exist`,
-      );
-    }
-    return new User(
-      await this.usersService.create({
-        ...input,
-        email: input.email.toLowerCase(),
-      }),
-    );
   }
   @Get('')
   @ResponseToSerializable(UserDto)
@@ -54,11 +45,7 @@ export class UsersController {
   @ResponseToSerializable(UserDto)
   @UseInterceptors(ClassSerializerInterceptor)
   async findOne(@Param('id') id: string): Promise<UserDto> {
-    const user = await this.usersService.findOneById(+id);
-    if (!user) {
-      throw new NotFoundException(`User with ${id} not found`);
-    }
-    return user;
+    return await this.usersService.findOneById(+id);
   }
   @Patch('/:id')
   @ResponseToSerializable(UserDto)
@@ -67,26 +54,10 @@ export class UsersController {
     @Param('id') id: string,
     @Body() body: UpdateUserDto,
   ): Promise<UserDto> {
-    const user = await this.usersService.findOneById(+id);
-    const userByEmail =
-      body.email &&
-      (await this.usersService.findUnique({
-        email: body.email.toLowerCase(),
-      }));
-    if (!user) {
-      throw new NotFoundException(`User with ${id} not found`);
-    }
-    if (userByEmail) {
-      throw new BadRequestException(`User with ${user.email} alredy exist`);
-    }
     return await this.usersService.update(+id, body);
   }
   @Delete('/:id')
   async remove(@Param('id') id: string) {
-    const user = await this.usersService.findOneById(+id);
-    if (!user) {
-      throw new NotFoundException(`User with ${id} not found`);
-    }
     await this.usersService.remove(+id);
   }
 }
