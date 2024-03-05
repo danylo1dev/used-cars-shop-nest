@@ -1,13 +1,25 @@
+### Registration
 POST http://localhost:3000/auth/signup
 Content-Type: application/json
 
 {
-    "email": "admin@mail.com",
+    "email": "admin1@mail.com",
     "password": "adminadmin"
 } 
 
 ### 
-GET  http://localhost:3000/auth/
+GET  http://localhost:3000/auth
 
 ###
 GET  http://localhost:3000/auth/1
+
+###Updagte
+PATCH   http://localhost:3000/auth/1
+Content-Type: application/json
+
+{
+    "password": "adminadmin"
+} 
+
+### Delete
+DELETE http://localhost:3000/auth/1
