@@ -1,9 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Report as PrismaReport } from '@prisma/client';
 
-@Entity()
-export class Report {
-  @PrimaryGeneratedColumn()
+export class Report implements PrismaReport {
   id: number;
-  @Column()
   price: number;
 }

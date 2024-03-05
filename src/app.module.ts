@@ -2,19 +2,18 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-// import ormConfig from './config/typeorm.config';
-
-import { User } from './users/entities/user.entity';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { PrismaService } from './prisma/prisma.service';
+import { UsersModule } from './users/users.module';
+import { ReportsModule } from './reports/reports.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      // load: [ormConfig],
       expandVariables: true,
     }),
+    UsersModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

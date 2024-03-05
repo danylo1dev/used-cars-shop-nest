@@ -1,11 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
-@Entity()
-export class User {
-  @PrimaryGeneratedColumn()
+import { User as PrismaUser } from '@prisma/client';
+export class User implements PrismaUser {
   id: number;
-  @Column()
   email: string;
-  @Column()
   password: string;
 }
