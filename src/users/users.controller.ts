@@ -50,7 +50,7 @@ export class UsersController {
     @Body() { email, password }: LoginDto,
     @Session() session: any,
   ): Promise<UserDto> {
-    const user = await this.authService.singin(email.toLowerCase(), password);
+    const user = await this.authService.signin(email.toLowerCase(), password);
     session.userId = user.id;
     return user;
   }

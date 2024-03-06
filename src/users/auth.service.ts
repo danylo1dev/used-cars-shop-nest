@@ -47,7 +47,7 @@ export class AuthService {
     });
     return this.userService.create(user);
   }
-  async singin(email: string, password: string) {
+  async signin(email: string, password: string) {
     const user = await this.userService.findUniqueOrDotThrow({ email });
     if (!user) {
       throw new NotFoundException(`User with ${email} not found`);
