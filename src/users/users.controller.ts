@@ -10,6 +10,7 @@ import {
   Query,
   SerializeOptions,
   Session,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ResponseToSerializable } from 'src/decorators/ResponseToSerializable';
@@ -20,12 +21,12 @@ import { UserDto } from './dtos/user.dto';
 import { UsersService } from './users.service';
 import { LoginDto } from './dtos/login.dto';
 import { CurrentUser } from './decorators/current-user.decorator';
-import { CurrentSessionUserInterceptor } from './interceptors/current-user.interceptor';
+import { SessionAuthGuard } from 'src/guards/session-auth.guard';
 
 @Controller('/auth')
 @SerializeOptions({ strategy: 'exposeAll' })
 @ResponseToSerializable(UserDto)
-@UseInterceptors(CurrentSessionUserInterceptor, ClassSerializerInterceptor)
+@UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
@@ -57,11 +58,13 @@ export class UsersController {
   whoAmI(@CurrentUser() user: UserDto): UserDto {
     return user;
   }
-  @Post('/singout')
+  @Post('/signout')
   singOut(@Session() session: any) {
     session.userId = null;
+    return;
   }
   @Get('')
+  @UseGuards(SessionAuthGuard)
   async findAll(@Query() query: { email: string }): Promise<UserDto[]> {
     return await this.usersService.find(query);
   }

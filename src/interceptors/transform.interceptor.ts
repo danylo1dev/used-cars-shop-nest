@@ -15,9 +15,13 @@ export class ResponseToSerializableInterceptor<T>
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((data) => {
-        return Array.isArray(data)
-          ? data.map((elem) => new this.TCreator(elem))
-          : [data].map((elem) => new this.TCreator(elem));
+        if (data) {
+          return Array.isArray(data)
+            ? data.map((elem) => new this.TCreator(elem))
+            : [data].map((elem) => new this.TCreator(elem));
+        } else {
+          return data;
+        }
       }),
     );
   }
