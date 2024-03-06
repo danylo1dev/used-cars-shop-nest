@@ -9,6 +9,7 @@ import {
   Post,
   Query,
   SerializeOptions,
+  Session,
   UseInterceptors,
 } from '@nestjs/common';
 import { ResponseToSerializable } from 'src/decorators/ResponseToSerializable';
@@ -17,9 +18,14 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserDto } from './dtos/user.dto';
 import { UsersService } from './users.service';
+import { LoginDto } from './dtos/login.dto';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { CurrentSessionUserInterceptor } from './interceptors/current-user.interceptor';
 
 @Controller('/auth')
 @SerializeOptions({ strategy: 'exposeAll' })
+@ResponseToSerializable(UserDto)
+@UseInterceptors(CurrentSessionUserInterceptor, ClassSerializerInterceptor)
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
@@ -27,29 +33,43 @@ export class UsersController {
   ) {}
 
   @Post('/signup')
-  @ResponseToSerializable(UserDto)
-  @UseInterceptors(ClassSerializerInterceptor)
-  async singUp(@Body() input: CreateUserDto): Promise<UserDto> {
-    return await this.authService.signup({
+  async singup(
+    @Body() input: CreateUserDto,
+    @Session() session: any,
+  ): Promise<UserDto> {
+    const user = await this.authService.signup({
       ...input,
       email: input.email.toLowerCase(),
     });
+    session.userId = user.id;
+    return user;
+  }
+  @Post('/login')
+  async login(
+    @Body() { email, password }: LoginDto,
+    @Session() session: any,
+  ): Promise<UserDto> {
+    const user = await this.authService.singin(email.toLowerCase(), password);
+    session.userId = user.id;
+    return user;
+  }
+  @Get('/whoami')
+  whoAmI(@CurrentUser() user: UserDto): UserDto {
+    return user;
+  }
+  @Post('/singout')
+  singOut(@Session() session: any) {
+    session.userId = null;
   }
   @Get('')
-  @ResponseToSerializable(UserDto)
-  @UseInterceptors(ClassSerializerInterceptor)
   async findAll(@Query() query: { email: string }): Promise<UserDto[]> {
     return await this.usersService.find(query);
   }
   @Get('/:id')
-  @ResponseToSerializable(UserDto)
-  @UseInterceptors(ClassSerializerInterceptor)
   async findOne(@Param('id') id: string): Promise<UserDto> {
     return await this.usersService.findOneById(+id);
   }
   @Patch('/:id')
-  @ResponseToSerializable(UserDto)
-  @UseInterceptors(ClassSerializerInterceptor)
   async update(
     @Param('id') id: string,
     @Body() body: UpdateUserDto,
