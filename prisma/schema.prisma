@@ -20,6 +20,12 @@ model User {
 }
 
 model Report {
-  id    Int @id @default(autoincrement())
-  price Int
+  id      Int    @id @default(autoincrement())
+  price   Int
+  mark    String
+  model   String
+  year    String
+  lon     Int
+  lat     Int
+  mileage Int
 }
