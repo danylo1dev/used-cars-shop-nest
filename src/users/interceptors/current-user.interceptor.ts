@@ -11,7 +11,6 @@ export class CurrentSessionUserInterceptor implements NestInterceptor {
     if (userId) {
       const user = await this.userService.findUniqueOrDotThrow({ id: +userId });
       request.user = user;
-      console.log(user);
     }
     return next.handle();
   }

@@ -2,7 +2,7 @@ import { OmitType } from "@nestjs/mapped-types";
 import { IsLatitude, IsLongitude, IsNumber, IsString, Max, Min } from "class-validator";
 import { Report } from "../entities/report.entity";
 
-export class CreateReportDto extends OmitType(Report, ["id", "userId"]) {
+export class CreateReportDto extends OmitType(Report, ["id", "userId", "approved"]) {
   @IsString()
   mark: string;
   @IsString()

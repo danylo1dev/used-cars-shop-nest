@@ -21,14 +21,15 @@ model User {
 }
 
 model Report {
-  id      Int    @id @default(autoincrement())
-  price   Int
-  mark    String
-  model   String
-  year    Int
-  lon     Int
-  lat     Int
-  mileage Int
-  user    User   @relation(fields: [userId], references: [id])
-  userId  Int
+  id       Int     @id @default(autoincrement())
+  price    Int
+  mark     String
+  model    String
+  year     Int
+  lon      Int
+  lat      Int
+  mileage  Int
+  user     User    @relation(fields: [userId], references: [id])
+  userId   Int
+  approved Boolean @default(false)
 }

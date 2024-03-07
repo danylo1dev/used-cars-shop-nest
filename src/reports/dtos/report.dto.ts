@@ -5,6 +5,8 @@ export class ReportDto implements Report {
     Object.assign(this, partial);
   }
   @Expose()
+  approved: boolean;
+  @Expose()
   userId: number;
   @Expose()
   mark: string;
