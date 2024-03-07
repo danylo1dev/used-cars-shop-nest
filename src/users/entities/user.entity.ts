@@ -1,4 +1,4 @@
-import { User as PrismaUser } from '@prisma/client';
+import { User as PrismaUser } from "@prisma/client";
 
 export class User implements PrismaUser {
   constructor(partial?: Partial<User>) {

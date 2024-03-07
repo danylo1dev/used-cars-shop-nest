@@ -1,11 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
-import { AuthService } from './auth.service';
-import { User } from './entities/user.entity';
-import { NotFoundException } from '@nestjs/common';
+import { Test, TestingModule } from "@nestjs/testing";
+import { UsersController } from "./users.controller";
+import { UsersService } from "./users.service";
+import { AuthService } from "./auth.service";
+import { User } from "./entities/user.entity";
+import { NotFoundException } from "@nestjs/common";
 
-describe('UsersController', () => {
+describe("UsersController", () => {
   let controller: UsersController;
   let fakeUserService: Partial<UsersService>;
   let fakeAuthService: Partial<AuthService>;
@@ -23,15 +23,13 @@ describe('UsersController', () => {
         return Promise.resolve(
           new User({
             id: where.id,
-            email: 'mail@mail.com',
-            password: 'password',
+            email: "mail@mail.com",
+            password: "password",
           }),
         );
       },
       find: (where: { email: string }): Promise<User[]> => {
-        return Promise.resolve([
-          new User({ id: 1, email: where.email, password: 'password' }),
-        ]);
+        return Promise.resolve([new User({ id: 1, email: where.email, password: "password" })]);
       },
       // remove: (): Promise<void> => {},
       // update: () => {},
@@ -59,31 +57,31 @@ describe('UsersController', () => {
     controller = module.get<UsersController>(UsersController);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(controller).toBeDefined();
   });
-  describe('Find', () => {
-    it('findAll returns a list of users with the given email', async () => {
-      const users = await controller.findAll({ email: 'test@mail.com' });
+  describe("Find", () => {
+    it("findAll returns a list of users with the given email", async () => {
+      const users = await controller.findAll({ email: "test@mail.com" });
       expect(users.length).toEqual(1);
-      expect(users[0].email).toEqual('test@mail.com');
+      expect(users[0].email).toEqual("test@mail.com");
     });
-    it('findOne should return user with id', async () => {
-      const user = await controller.findOne('1');
+    it("findOne should return user with id", async () => {
+      const user = await controller.findOne("1");
       expect(user).toBeDefined;
     });
-    it('findUser throws an error if user with given id is not found', async () => {
+    it("findUser throws an error if user with given id is not found", async () => {
       fakeUserService.findUniqueOrDotThrow = () => null;
-      await expect(controller.findOne('1')).rejects.toThrow(NotFoundException);
+      await expect(controller.findOne("1")).rejects.toThrow(NotFoundException);
     });
   });
-  describe('signin', () => {
-    it('should return update sesion and user ', async () => {
+  describe("signin", () => {
+    it("should return update sesion and user ", async () => {
       const sesion: any = {};
       const user = await controller.login(
         {
-          email: 'test@mail.com',
-          password: 'password',
+          email: "test@mail.com",
+          password: "password",
         },
         sesion,
       );

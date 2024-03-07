@@ -1,8 +1,8 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { ValidationPipe } from "@nestjs/common";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const CookieSession = require('cookie-session');
+const CookieSession = require("cookie-session");
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
@@ -13,7 +13,7 @@ async function bootstrap() {
   );
   app.use(
     CookieSession({
-      keys: [process.env.COOKIES_KEY || 'secret'],
+      keys: [process.env.COOKIES_KEY || "secret"],
     }),
   );
 

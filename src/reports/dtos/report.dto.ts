@@ -1,9 +1,11 @@
-import { Expose } from 'class-transformer';
-import { Report } from '../entities/report.entity';
+import { Expose } from "class-transformer";
+import { Report } from "../entities/report.entity";
 export class ReportDto implements Report {
   constructor(partial?: Partial<ReportDto>) {
     Object.assign(this, partial);
   }
+  @Expose()
+  userId: number;
   @Expose()
   mark: string;
   @Expose()

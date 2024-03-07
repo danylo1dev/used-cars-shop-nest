@@ -1,16 +1,9 @@
-import {
-  CallHandler,
-  ExecutionContext,
-  Injectable,
-  NestInterceptor,
-} from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Injectable()
-export class ResponseToSerializableInterceptor<T>
-  implements NestInterceptor<T>
-{
+export class ResponseToSerializableInterceptor<T> implements NestInterceptor<T> {
   constructor(private TCreator: new (...arg) => T) {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(

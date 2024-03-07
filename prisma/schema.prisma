@@ -14,9 +14,10 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
   password String
+  reports  Report[]
 }
 
 model Report {
@@ -28,4 +29,6 @@ model Report {
   lon     Int
   lat     Int
   mileage Int
+  user    User   @relation(fields: [userId], references: [id])
+  userId  Int
 }

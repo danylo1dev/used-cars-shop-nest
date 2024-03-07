@@ -1,13 +1,9 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { Prisma } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateUserDto } from './dtos/create-user.dto';
-import { UpdateUserDto } from './dtos/update-user.dto';
-import { User } from './entities/user.entity';
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
+import { PrismaService } from "src/prisma/prisma.service";
+import { CreateUserDto } from "./dtos/create-user.dto";
+import { UpdateUserDto } from "./dtos/update-user.dto";
+import { User } from "./entities/user.entity";
 
 @Injectable()
 export class UsersService {
@@ -17,16 +13,12 @@ export class UsersService {
       email: input.email.toLowerCase(),
     });
     if (user) {
-      throw new BadRequestException(
-        `User with email ${input.email} alredy exist`,
-      );
+      throw new BadRequestException(`User with email ${input.email} alredy exist`);
     }
     const data = new User({ ...input, email: input.email.toLowerCase() });
     return await this.prisma.user.create({ data });
   }
-  async findUniqueOrDotThrow(
-    where: Prisma.UserWhereUniqueInput,
-  ): Promise<User> {
+  async findUniqueOrDotThrow(where: Prisma.UserWhereUniqueInput): Promise<User> {
     return await this.prisma.user.findUnique({ where });
   }
   async findOneById(id: number) {
