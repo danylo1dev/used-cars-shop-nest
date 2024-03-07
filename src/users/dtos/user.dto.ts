@@ -5,6 +5,8 @@ export class UserDto implements User {
     Object.assign(this, partial);
   }
   @Expose()
+  admin: boolean;
+  @Expose()
   id: number;
   @Expose()
   email: string;

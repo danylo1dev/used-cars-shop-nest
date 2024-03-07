@@ -1,6 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common";
+import { CurrentSessionUserMiddleware } from "./middlewares/current-user.middleware";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const CookieSession = require("cookie-session");
 async function bootstrap() {

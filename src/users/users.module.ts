@@ -1,21 +1,16 @@
-import { Module } from "@nestjs/common";
+import { MiddlewareConsumer, Module } from "@nestjs/common";
+import { CurrentSessionUserMiddleware } from "src/middlewares/current-user.middleware";
 import { PrismaService } from "src/prisma/prisma.service";
+import { AuthService } from "./auth.service";
 import { UsersController } from "./users.controller";
 import { UsersService } from "./users.service";
-import { AuthService } from "./auth.service";
-import { CurrentSessionUserInterceptor } from "./interceptors/current-user.interceptor";
-import { APP_INTERCEPTOR } from "@nestjs/core";
 
 @Module({
   controllers: [UsersController],
-  providers: [
-    UsersService,
-    PrismaService,
-    AuthService,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CurrentSessionUserInterceptor,
-    },
-  ],
+  providers: [UsersService, PrismaService, AuthService],
 })
-export class UsersModule {}
+export class UsersModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CurrentSessionUserMiddleware).forRoutes("*");
+  }
+}

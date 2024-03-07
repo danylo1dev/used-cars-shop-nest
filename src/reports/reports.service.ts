@@ -4,6 +4,7 @@ import { CreateReportDto } from "./dtos/create-report.dto";
 import { Report } from "./entities/report.entity";
 import { User } from "src/users/entities/user.entity";
 import { Prisma } from "@prisma/client";
+import { GetEstimateDto } from "./dtos/get-estimate.dto";
 
 @Injectable()
 export class ReportsService {
@@ -15,6 +16,26 @@ export class ReportsService {
         userId: user.id,
       },
     });
+  }
+  async createEstimate({ mark, model, lat, lon, year }: GetEstimateDto) {
+    const { _avg } = await this.prismaService.report.aggregate({
+      _avg: {
+        price: true,
+      },
+      take: 3,
+      where: {
+        approved: true,
+        mark,
+        model,
+        lat: { lte: lat + 5, gte: lat - 5 },
+        lon: { lte: lon + 5, gte: lon - 5 },
+        year: { lte: year + 3, gte: year - 3 },
+      },
+      orderBy: {
+        price: "desc",
+      },
+    });
+    return _avg;
   }
   async findUnique(where: Prisma.ReportWhereUniqueInput): Promise<Report> {
     return await this.prismaService.report.findUnique({ where });
