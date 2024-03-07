@@ -24,7 +24,7 @@ model Report {
   price   Int
   mark    String
   model   String
-  year    String
+  year    Int
   lon     Int
   lat     Int
   mileage Int

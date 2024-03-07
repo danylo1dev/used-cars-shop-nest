@@ -16,25 +16,6 @@ const CookieSession = require('cookie-session');
     UsersModule,
     ReportsModule,
   ],
-  providers: [
-    PrismaService,
-    {
-      provide: APP_PIPE,
-      useValue: new ValidationPipe({
-        whitelist: true,
-        transform: true,
-      }),
-    },
-  ],
+  providers: [PrismaService],
 })
-export class AppModule {
-  configyre(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(
-        CookieSession({
-          keys: [process.env.COOKIES_KEY],
-        }),
-      )
-      .forRoutes('*');
-  }
-}
+export class AppModule {}

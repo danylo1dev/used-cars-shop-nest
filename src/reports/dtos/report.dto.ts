@@ -1,4 +1,4 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Expose } from 'class-transformer';
 import { Report } from '../entities/report.entity';
 export class ReportDto implements Report {
   constructor(partial?: Partial<ReportDto>) {
@@ -9,7 +9,7 @@ export class ReportDto implements Report {
   @Expose()
   model: string;
   @Expose()
-  year: string;
+  year: number;
   @Expose()
   lon: number;
   @Expose()
