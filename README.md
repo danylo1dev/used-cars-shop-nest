@@ -12,7 +12,7 @@ I've been working with `Prisma`, writing custom `middlewares` `interceptors`. I'
 
 ---
 
-# Instaling
+# Installing
 
 ## Prerequisites
 
